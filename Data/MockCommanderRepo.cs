@@ -10,7 +10,7 @@ namespace Commander.Data
       var commands = new List<Command>
       {
         new Command{Id=0, HowTo="Make Tacos", Line="Season Meat", Platform="Pan"},
-        new Command{Id=0, HowTo="Make Pizza", Line="Add Cheese", Platform="Ovem"},
+        new Command{Id=0, HowTo="Make Pizza", Line="Add Cheese", Platform="Oven"},
         new Command{Id=0, HowTo="Make Spagetti", Line="Boil Water", Platform="Pot"}
       };
       return commands;
