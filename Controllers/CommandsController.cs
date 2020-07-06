@@ -60,5 +60,24 @@ namespace Commander.Controllers
 
       return CreatedAtRoute(nameof(GetCommandById), new { Id = commandReadDto.Id }, commandReadDto);
     }
+
+    [HttpPut("{id}")]
+    public ActionResult<CommandReadDto> UpdateCommand(int id, CommandUpateDto commandUpateDto)
+    {
+      var commandModelFromRepo = _repository.GetCommandById(id);
+
+      if(commandModelFromRepo == null)
+      {
+        return NotFound();
+      }
+
+      // map incoming DTO to model return from DB
+      _mapper.Map(commandUpateDto, commandModelFromRepo);
+
+      _repository.UppdateCommand(commandModelFromRepo);
+      _repository.SaveChanges();
+
+      return NoContent();
+    }
   }
 }

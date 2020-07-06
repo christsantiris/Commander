@@ -38,5 +38,10 @@ namespace Commander.Data
     {
       return (_context.SaveChanges() >= 0);
     }
+
+    public void UppdateCommand(Command cms)
+    {
+      // Implement function here
+    }
   }
 }
