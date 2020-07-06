@@ -11,11 +11,11 @@ namespace Commander.Profiles
         // Source -> Target
         CreateMap<Command, CommandReadDto>();
 
-        // Target -> Source
         CreateMap<CommandCreateDto, Command>();
 
-        // Target -> Source
-        CreateMap<CommandUpateDto, Command>();
+        CreateMap<CommandUpdateDto, Command>();
+
+        CreateMap<Command, CommandUpdateDto>();
     }
   }
 }

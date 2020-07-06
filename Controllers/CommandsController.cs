@@ -5,6 +5,7 @@ using Commander.Dtos;
 using Commander.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace Commander.Controllers
 {
@@ -61,8 +62,9 @@ namespace Commander.Controllers
       return CreatedAtRoute(nameof(GetCommandById), new { Id = commandReadDto.Id }, commandReadDto);
     }
 
+    // PUT api/commands/{id}
     [HttpPut("{id}")]
-    public ActionResult<CommandReadDto> UpdateCommand(int id, CommandUpateDto commandUpateDto)
+    public ActionResult<CommandReadDto> UpdateCommand(int id, CommandUpdateDto commandUpateDto)
     {
       var commandModelFromRepo = _repository.GetCommandById(id);
 
@@ -71,7 +73,7 @@ namespace Commander.Controllers
         return NotFound();
       }
 
-      // map incoming DTO to model return from DB
+      // map incoming DTO to model returned from DB
       _mapper.Map(commandUpateDto, commandModelFromRepo);
 
       _repository.UppdateCommand(commandModelFromRepo);
@@ -79,5 +81,33 @@ namespace Commander.Controllers
 
       return NoContent();
     }
+
+    // PATCH api/commands/{id} 
+    [HttpPatch("{id}")]
+     public ActionResult PartialCommandUpdate(int id, JsonPatchDocument<CommandUpdateDto> patchDoc)
+     {
+       var commandModelFromRepo = _repository.GetCommandById(id);
+
+       if(commandModelFromRepo == null)
+       {
+         return NotFound();
+       }
+
+       var commandToPatch = _mapper.Map<CommandUpdateDto>(commandModelFromRepo);
+       patchDoc.ApplyTo(commandToPatch, ModelState);
+
+       if(!TryValidateModel(commandToPatch))
+       {
+         return ValidationProblem(ModelState);
+       }
+
+       _mapper.Map(commandToPatch, commandModelFromRepo);
+
+       _repository.UppdateCommand(commandModelFromRepo);
+
+       _repository.SaveChanges();
+
+       return NoContent();
+     }
   }
 }

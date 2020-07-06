@@ -39,9 +39,9 @@ namespace Commander.Data
       return (_context.SaveChanges() >= 0);
     }
 
-    public void UppdateCommand(Command cms)
+    public void UppdateCommand(Command cmd)
     {
-      // Implement function here
+      _context.Commands.Update(cmd);
     }
   }
 }
